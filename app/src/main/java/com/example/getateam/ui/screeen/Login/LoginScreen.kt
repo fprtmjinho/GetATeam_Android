@@ -19,7 +19,7 @@ fun LoginScreen(
     val state by viewModel.state
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
