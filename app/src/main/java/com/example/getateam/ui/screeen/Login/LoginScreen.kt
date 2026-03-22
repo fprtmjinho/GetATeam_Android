@@ -34,6 +34,7 @@ fun LoginScreen(
             label = "아이디",
             value = state.id,
             onValueChange = viewModel::onIdChange
+
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -47,7 +48,10 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        LoginButton(onClick = viewModel::login)
+        LoginButton(
+            onClick = viewModel::login,
+            enabled = state.isFormValid
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
