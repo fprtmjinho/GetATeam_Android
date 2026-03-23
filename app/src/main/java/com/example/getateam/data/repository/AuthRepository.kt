@@ -1,6 +1,7 @@
 package com.example.getateam.data.repository
 
 import android.content.Context
+import android.util.Log
 import com.example.getateam.data.remote.ApiClient
 import com.example.getateam.data.remote.model.LoginRequest
 import com.example.getateam.data.remote.model.LoginResponse
@@ -8,20 +9,20 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.getateam.data.remote.model.BaseResponse
 import kotlinx.coroutines.flow.first
 
 private val Context.dataStore by preferencesDataStore("user_prefs")
 class AuthRepository(private val context: Context) {
     private val api = ApiClient.authApi
 
-    suspend fun login(id: String, password: String): Result<LoginResponse> {
+    suspend fun login(id: String, password: String): Result<BaseResponse<LoginResponse>> {
         return try {
             val response = api.login(LoginRequest(id, password))
-
             if (response.isSuccessful) {
                 val body = response.body()!!
-                // 로그인 성공 시 토큰 저장
-                saveTokens(body.accessToken, body.refreshToken, body.userId)
+                val data = body.data!!
+                saveTokens(data.accessToken, data.refreshToken, data.userId)
                 Result.success(body)
             } else {
                 Result.failure(Exception("로그인 실패"))

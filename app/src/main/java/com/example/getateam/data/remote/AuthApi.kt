@@ -1,5 +1,6 @@
 package com.example.getateam.data.remote
 
+import com.example.getateam.data.remote.model.BaseResponse
 import com.example.getateam.data.remote.model.LoginRequest
 import com.example.getateam.data.remote.model.LoginResponse
 import retrofit2.Response
@@ -11,5 +12,5 @@ interface AuthApi {
     @POST("/auth/login")
     suspend fun login(
         @Body request: LoginRequest
-    ): Response<LoginResponse>
+    ): Response<BaseResponse<LoginResponse>>
 }
