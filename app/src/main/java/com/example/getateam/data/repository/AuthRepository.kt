@@ -21,11 +21,15 @@ class AuthRepository(private val context: Context) {
             val response = api.login(LoginRequest(id, password))
             if (response.isSuccessful) {
                 val body = response.body()!!
-                val data = body.data!!
-                saveTokens(data.accessToken, data.refreshToken, data.userId)
-                Result.success(body)
+                if(body.isSuccess && body.data != null){
+                    val data = body.data!!
+                    saveTokens(data.accessToken, data.refreshToken, data.userId)
+                    Result.success(body)
+                } else {
+                    Result.failure(Exception("로그인 실패: ${body.message}"))
+                }
             } else {
-                Result.failure(Exception("로그인 실패"))
+                Result.failure(Exception("로그인 실패: ${response.code()}"))
             }
 
         } catch (e: Exception) {
