@@ -31,13 +31,18 @@ class LoginViewModel(
 
     fun login() {
         val current = state.value
+        if (current.isLoading) return
         if (!current.isFormValid) {
             state.value = current.copy(loginError = "아이디/비밀번호를 입력해주세요")
             return
         }
 
         viewModelScope.launch {
-            state.value = current.copy(isLoading = true, loginError = null)
+            state.value = state.value.copy(
+                isLoading = true,
+                loginError = null,
+                loginSuccess = false
+            )
             val result = repository.login(current.id, current.password)
             result.fold(
                 onSuccess = {
